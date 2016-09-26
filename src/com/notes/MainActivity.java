@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -37,6 +39,26 @@ public class MainActivity extends Activity implements OnClickListener {
 		video.setOnClickListener(this);
 		notesDB = new NotesDB(this);// สตภýปฏ
 		dbReader = notesDB.getReadableDatabase();
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				cursor.moveToPosition(position);
+				Intent i = new Intent(MainActivity.this, SelectAct.class);
+				i.putExtra(NotesDB.ID,
+						cursor.getInt(cursor.getColumnIndex(NotesDB.ID)));
+				i.putExtra(NotesDB.CONTENT, cursor.getString(cursor
+						.getColumnIndex(NotesDB.CONTENT)));
+				i.putExtra(NotesDB.TIME,
+						cursor.getString(cursor.getColumnIndex(NotesDB.TIME)));
+				i.putExtra(NotesDB.PATH,
+						cursor.getString(cursor.getColumnIndex(NotesDB.PATH)));
+				i.putExtra(NotesDB.VIDEO,
+						cursor.getString(cursor.getColumnIndex(NotesDB.VIDEO)));
+				startActivity(i);
+			}
+		});
 	}
 
 	@Override
